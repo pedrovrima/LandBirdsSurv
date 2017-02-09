@@ -1,4 +1,4 @@
-markch.creator <- function(spp,init.cut="none",age="AHY"){
+markch.creator <- function(spp,time.but=NULL,init.cut="none",age="AHY"){
 ###Function###
 
 
@@ -7,8 +7,9 @@ markch.creator <- function(spp,init.cut="none",age="AHY"){
     ##Recap History##
     tt <- read.csv(paste(filefold,"/",spp,"_CapHistCovars.csv",sep=""),head=T)
     ##Database##
+    if(time.cut!=NULL){
     load(database)
-    
+    }
 ###Select the important part of the table
     bnum <-tt[,2] ##BandNumbers
     chist <- which(substring(colnames(tt),1,3)=="CAP")
@@ -69,11 +70,11 @@ markch.creator <- function(spp,init.cut="none",age="AHY"){
     
 ###########################################################################################
 #####Create Table#####
-    caphist <- caphist[-which(apply(caphist,1,sum)==0),]
-    bands <- paste("/*",bnum,"*/")
-    history <- apply(caphist,1,function(x)paste(x,collapse=""))
+    frmv <- which(apply(caphist,1,sum)==0)
+    bands <- paste("/*",bnum[-frmv],"*/")
+    history <- apply(caphist[-frmv,],1,function(x)paste(x,collapse=""))
     info <- paste("/*",spp,"-",length(history),"Individuals -",ncol(caphist),"Ocasions */\r\n")
 
 
-    cat(paste(c(info,paste(bands,history,paste(grp,";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",spp,init.cut,".inp",sep=""))
+    cat(paste(c(info,paste(bands,history,paste(grp[-frmv],";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",spp,init.cut,".inp",sep=""))
 }

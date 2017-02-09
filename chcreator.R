@@ -17,6 +17,7 @@
 ##1-"none" - no initial cuts
 ##2-"1992" - starts the CH on 1992
 ##3-"firstcap" - starts at the first capture for the species####
+####time.cut - STILL not available
 ####age - 3 options####
 ##1- "AHY" - only birds first captured as AHY
 ##2- "HY" - only birds first captured as HY
