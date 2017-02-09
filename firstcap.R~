@@ -3,4 +3,5 @@ load("/home/colibri/Documents/RSL/RData/KBMNbandtable.RData")
 
 spp <- "YWAR"
 
-bandnum <- band.table$Band.Number[which(band.table$Species.Code==spp & band.table$Rep.Status=="B"), ]
+bandnum <- band.table$Band.Number[which(band.table$Species.Code==spp & band.table$Rep.Status=="B")]
+
