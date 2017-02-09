@@ -5,7 +5,7 @@ markch.creator <- function(spp,init.cut="none",age="AHY"){
 
 ###########Load the Data################
     ##Recap History##
-    tt <- read.csv(paste(filefold,spp,"_CapHistCovars.csv",sep=""),head=T)
+    tt <- read.csv(paste(filefold,"/",spp,"_CapHistCovars.csv",sep=""),head=T)
     ##Database##
     
     

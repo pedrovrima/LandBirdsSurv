@@ -22,8 +22,8 @@
 ##2- "HY" - only birds first captured as HY
 ##3- "all" - all individuals on the raw CH
 
-filefold <- "/home/colibri/Documents/WHERE_THE_FILES_ARE" #####Use the folder where the base capture files (csv) are####
-resulfod <- "/home/colibri/Documents/WHERE_THE_RESULT_WILL_BE_STORED"##The folder where the final files will be stored
+filefold <- "/home/colibri/Documents/RSL/KBMN Capture Histories" #####Use the folder where the base capture files (csv) are####
+resulfold <- "/home/colibri/Documents/"##The folder where the final files will be stored
 source("/home/colibri/Documents/RSL/Codes/caphist.R")#######Path to function code
 
 markch.creator(spp="SOSP",init.cut="1992")
