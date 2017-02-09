@@ -1,4 +1,4 @@
-markch.creator <- function(spp,time.but=NULL,init.cut="none",age="AHY"){
+markch.creator <- function(spp,time.cut=0,init.cut="none",age="AHY"){
 ###Function###
 
 
@@ -7,7 +7,7 @@ markch.creator <- function(spp,time.but=NULL,init.cut="none",age="AHY"){
     ##Recap History##
     tt <- read.csv(paste(filefold,"/",spp,"_CapHistCovars.csv",sep=""),head=T)
     ##Database##
-    if(time.cut!=NULL){
+    if(time.cut>0){
     load(database)
     }
 ###Select the important part of the table
@@ -56,12 +56,12 @@ markch.creator <- function(spp,time.but=NULL,init.cut="none",age="AHY"){
         grp <- ahygroup[-rmvbird]
     }
     ##Only HY    
-    if(age=="AHY"){
+    if(age=="HY"){
         hygroup <- tt[,30]
         rmvbird <- which(hygroup==0)
         caphist <- caphist[-rmvbird,]
         bnum <- bnum[-rmvbird]
-        grp <- ahygroup[-rmvbird]
+        grp <- hygroup[-rmvbird]
     }
     ##All Ages and individuals
     if(age=="all"){
