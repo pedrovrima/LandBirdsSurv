@@ -5,7 +5,7 @@ markch.creator <- function(spp,init.cut="none",age="AHY"){
 
 ###########Load the Data################
     ##Recap History##
-    tt <- read.csv(paste("KBMN Capture Histories/",spp,"_CapHistCovars.csv",sep=""),head=T)
+    tt <- read.csv(paste(filefold,spp,"_CapHistCovars.csv",sep=""),head=T)
     ##Database##
     
     
@@ -72,5 +72,5 @@ markch.creator <- function(spp,init.cut="none",age="AHY"){
     info <- paste("/*",spp,"-",length(history),"Individuals -",ncol(caphist),"Ocasions */\r\n")
 
 
-    cat(paste(c(info,paste(bands,history,paste(grp,";\r\n",sep=""))),collapse=""),file=paste(spp,init.cut,".inp",sep=""))
+    cat(paste(c(info,paste(bands,history,paste(grp,";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",spp,init.cut,".inp",sep=""))
 }
