@@ -17,8 +17,10 @@
 ##1-"none" - no initial cuts
 ##2-"1992" - starts the CH on 1992
 ##3-"firstcap" - starts at the first capture for the species####
-####age - STILL NOT WORKING####
-
+####age - 3 options####
+##1- "AHY" - only birds first captured as AHY
+##2- "HY" - only birds first captured as HY
+##3- "all" - all individuals on the raw CH
 
 setwd("/home/colibri/Documents/RSL") #####Use the folder where the base capture files (csv) are####
 ##The final files will show up here##
