@@ -7,7 +7,7 @@ markch.creator <- function(spp,init.cut="none",age="AHY"){
     ##Recap History##
     tt <- read.csv(paste(filefold,"/",spp,"_CapHistCovars.csv",sep=""),head=T)
     ##Database##
-    
+    load(database)
     
 ###Select the important part of the table
     bnum <-tt[,2] ##BandNumbers
@@ -26,14 +26,16 @@ markch.creator <- function(spp,init.cut="none",age="AHY"){
     ##1992 cut###
     if(init.cut=="1992"){
         ninetwo <- chist[-which(as.numeric(substring(colnames(tt)[chist],5,9))<1992)]
-        caphist <- tt[,ninetwo]}
+        caphist <- tt[,ninetwo]
+    }
 
     ##Specific cut##
     if(init.cut=="firstcap"){
         cols <- apply(tt[,chist],2,sum)
         vv <- min(which(cols!=0))
         firstcap <- chist[vv:length(chist)]
-        caphist <- tt[,firstcap]}
+        caphist <- tt[,firstcap]
+    }
 
 
 #####August####
@@ -67,6 +69,7 @@ markch.creator <- function(spp,init.cut="none",age="AHY"){
     
 ###########################################################################################
 #####Create Table#####
+    caphist <- caphist[-which(apply(caphist,1,sum)==0),]
     bands <- paste("/*",bnum,"*/")
     history <- apply(caphist,1,function(x)paste(x,collapse=""))
     info <- paste("/*",spp,"-",length(history),"Individuals -",ncol(caphist),"Ocasions */\r\n")
