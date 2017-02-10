@@ -1,11 +1,11 @@
-markch.creator <- function(spp,time.cut=0,init.cut="none",age="AHY"){
+markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY"){
 ###Function###
 
 
 
 ###########Load the Data################
     ##Recap History##
-    tt <- read.csv(paste(filefold,"/",spp,"_CapHistCovars.csv",sep=""),head=T)
+    tt <- read.csv(paste(filefold,"/",sp,"_CapHistCovars.csv",sep=""),head=T)
     ##Database##
     if(time.cut>0){
     load(database)
@@ -40,9 +40,24 @@ markch.creator <- function(spp,time.cut=0,init.cut="none",age="AHY"){
 
 
 #####August####
-    ##Do nothing##
-    
     ##Remove the augustine individuals##
+    if(time.cut>0){
+    jday <- julian.extract(DATA$JulianDay[which(DATA$BandNumber%in%bnum)])
+    vv <- as.matrix(cbind(as.numeric(as.character(DATA$BandNumber[which(DATA$BandNumber%in%bnum)])),as.numeric(jday$JulianDay)))
+    if(length(jday$is.NA)>0){vv
+        vv <- vv[-which(is.na(vv[,2])),]
+
+    }
+    vv <- as.data.frame(vv)
+    colnames(vv) <- c("bands","jday")
+    ll <- aggregate(vv[c("jday")],by=vv[c("bands")],FUN=min)   
+    cut <- which(as.numeric(ll[,2])>time.cut)
+    bcut <- ll[cut,1]
+    rmvag <- which(bnum%in%bcut)
+
+    }
+
+    
 ########
 
 
@@ -71,10 +86,16 @@ markch.creator <- function(spp,time.cut=0,init.cut="none",age="AHY"){
 ###########################################################################################
 #####Create Table#####
     frmv <- which(apply(caphist,1,sum)==0)
-    bands <- paste("/*",bnum[-frmv],"*/")
-    history <- apply(caphist[-frmv,],1,function(x)paste(x,collapse=""))
+    rmvbir <- unique(c(frmv,rmvag))
+    if(length(rmvbir)>0){
+        bnum <- bnum[-rmvbir]
+        caphist <- caphist[-rmvbir,]
+        grp <- grp[-rmvbir]
+    }
+    bands <- paste("/*",bnum,"*/")
+    history <- apply(caphist,1,function(x)paste(x,collapse=""))
     info <- paste("/*",spp,"-",length(history),"Individuals -",ncol(caphist),"Ocasions */\r\n")
 
 
-    cat(paste(c(info,paste(bands,history,paste(grp[-frmv],";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",spp,init.cut,".inp",sep=""))
+    cat(paste(c(info,paste(bands,history,paste(grp,";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",spp,"tmcut",init.cut,".inp",sep=""))
 }
