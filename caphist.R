@@ -94,8 +94,10 @@ markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY"){
     }
     bands <- paste("/*",bnum,"*/")
     history <- apply(caphist,1,function(x)paste(x,collapse=""))
-    info <- paste("/*",spp,"-",length(history),"Individuals -",ncol(caphist),"Ocasions */\r\n")
+    info <- paste("/*",sp,"-",length(history),"Individuals -",ncol(caphist),"Ocasions */\r\n")
 
-
-    cat(paste(c(info,paste(bands,history,paste(grp,";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",spp,"tmcut",init.cut,".inp",sep=""))
+    tmcutname <- NULL
+    if(time.cut>0)
+        tmcutname <- paste("_",time.cut,sep="")
+    cat(paste(c(info,paste(bands,history,paste(grp,";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",sp,tmcutname,"_",init.cut,".inp",sep=""))
 }
