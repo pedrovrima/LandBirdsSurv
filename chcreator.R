@@ -24,9 +24,21 @@
 ##3- "all" - all individuals on the raw CH
 
 filefold <- "/home/colibri/Documents/RSL/KBMN Capture Histories" #####The folder where the raw CH files (.csv) are - WITHOUT "/" in the end
-resulfold <- "/home/colibri/Documents/"##The folder where the final files will be stored - WITHOUT "/" in the end
+
 database <- "/home/colibri/Documents/RData/KBMNdata.RData"
 source("/home/colibri/Documents/RSL/Codes/caphist.R")#######Path to function code
+source("/home/colibri/Documents/RSL/Codes/functions.R")#######Path to function code
 
-markch.creator(spp="SOSP",init.cut="1992")
 
+load("/home/colibri/Documents/RSL/RData/spplist.RData")
+liu <- read.csv("/home/colibri/Documents/RSL/DayDec/DayDec.csv")
+cuts <- liu[,4]
+for(i in 1:length(spp)){
+    sp <- spp[i]
+    dircr <- paste("/home/colibri/Documents/breednine2/",sp,sep="")
+    dir.create(dircr)
+    resulfold <- dircr
+    cut <- cuts[i]
+    
+    markch.creator(sp=sp,time.cut=cut,init.cut="1992")
+}

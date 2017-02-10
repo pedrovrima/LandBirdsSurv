@@ -86,7 +86,11 @@ markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY"){
 ###########################################################################################
 #####Create Table#####
     frmv <- which(apply(caphist,1,sum)==0)
-    rmvbir <- unique(c(frmv,rmvag))
+    if("rmvag"%in%ls()){
+        rmvbir <- unique(c(frmv,rmvag))
+    }else{
+        rmvbir <- frmv
+        }
     if(length(rmvbir)>0){
         bnum <- bnum[-rmvbir]
         caphist <- caphist[-rmvbir,]
@@ -98,6 +102,6 @@ markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY"){
 
     tmcutname <- NULL
     if(time.cut>0)
-        tmcutname <- paste("_",time.cut,sep="")
+        tmcutname <- paste("_",ceiling(time.cut),sep="")
     cat(paste(c(info,paste(bands,history,paste(grp,";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",sp,tmcutname,"_",init.cut,".inp",sep=""))
 }
