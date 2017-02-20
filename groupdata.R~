@@ -1,0 +1,13 @@
+load("regiongroups.RData")
+
+grp <- matrix(NA,length(unlist(groups)),2)
+for(i in 1:length(groups)){
+    plcs <- names(groups[[i]])
+    grpname <- paste("region",i,sep="")
+    fr <- min(which(is.na(grp[,1])))
+    grp[fr:(fr+length(plcs)-1),1] <- plcs
+    grp[fr:(fr+length(plcs)-1),2] <- grpname
+}
+
+save(grp,file="grouptab.RData")
+

@@ -1,4 +1,4 @@
-markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY"){
+markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY",regions=F){
 ###Function###
 
 
@@ -64,33 +64,39 @@ markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY"){
 ###AGE####
     ##Only AHY
     if(age=="AHY"){
-        ahygroup <- tt[,31]
-        rmvbird <- which(ahygroup==0)
-        caphist <- caphist[-rmvbird,]
-        bnum <- bnum[-rmvbird]
-        grp <- ahygroup[-rmvbird]
+        grp <- tt[,31]
+        rmvbird <- which(grp==0)
+        
     }
     ##Only HY    
     if(age=="HY"){
-        hygroup <- tt[,30]
+        grp <- tt[,30]
         rmvbird <- which(hygroup==0)
-        caphist <- caphist[-rmvbird,]
-        bnum <- bnum[-rmvbird]
-        grp <- hygroup[-rmvbird]
-    }
+         }
     ##All Ages and individuals
     if(age=="all"){
         grp <- tt[,c(30,31)]
     }
+
+
+#########Group#########
+    if(regions==T){
+        load(regfile)
+        regs <- regtab[match(tt$STATION,grp[,1]),2]
+        regg <- aggregate(model.matrix(~ regs -1),list(1:nrow(tt)),max)[,-1]
+        grp <- cbind(grp,regg)
+
+    }
+
     
 ###########################################################################################
 #####Create Table#####
     frmv <- which(apply(caphist,1,sum)==0)
-    if("rmvag"%in%ls()){
-        rmvbir <- unique(c(frmv,rmvag))
-    }else{
-        rmvbir <- frmv
-        }
+    if(!"rmvag"%in%ls()) rmvag <- NULL
+    if(! "rmvbird"%in%ls()) rmvbird <- NULL
+    rmvbir <- unique(c(frmv,rmvag,rmvbird))
+    
+    
     if(length(rmvbir)>0){
         bnum <- bnum[-rmvbir]
         caphist <- caphist[-rmvbir,]
@@ -99,9 +105,9 @@ markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY"){
     bands <- paste("/*",bnum,"*/")
     history <- apply(caphist,1,function(x)paste(x,collapse=""))
     info <- paste("/*",sp,"-",length(history),"Individuals -",ncol(caphist),"Ocasions */\r\n")
-
+    
     tmcutname <- NULL
     if(time.cut>0)
         tmcutname <- paste("_",ceiling(time.cut),sep="")
-    cat(paste(c(info,paste(bands,history,paste(grp,";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",sp,tmcutname,"_",init.cut,".inp",sep=""))
+    cat(paste(c(info,paste(bands,history,paste(paste(grp,collapse=" "),";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",sp,tmcutname,"_",init.cut,".inp",sep=""))
 }
