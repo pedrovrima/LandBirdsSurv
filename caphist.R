@@ -79,10 +79,10 @@ markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY",regions=F){
     }
 
 
-#########Group#########
+##############Regions##########
     if(regions==T){
         load(regfile)
-        regs <- regtab[match(tt$STATION,grp[,1]),2]
+        regs <- regtab[match(tt$STATION,regtab[,1]),2]
         regg <- aggregate(model.matrix(~ regs -1),list(1:nrow(tt)),max)[,-1]
         grp <- cbind(grp,regg)
 
@@ -100,14 +100,18 @@ markch.creator <- function(sp,time.cut=0,init.cut="none",age="AHY",regions=F){
     if(length(rmvbir)>0){
         bnum <- bnum[-rmvbir]
         caphist <- caphist[-rmvbir,]
-        grp <- grp[-rmvbir]
+        grp <- grp[-rmvbir,]
     }
     bands <- paste("/*",bnum,"*/")
     history <- apply(caphist,1,function(x)paste(x,collapse=""))
     info <- paste("/*",sp,"-",length(history),"Individuals -",ncol(caphist),"Ocasions */\r\n")
-    
+
+    grpt <- apply(grp,1,function(x)paste(x,collapse=" "))
     tmcutname <- NULL
     if(time.cut>0)
         tmcutname <- paste("_",ceiling(time.cut),sep="")
-    cat(paste(c(info,paste(bands,history,paste(paste(grp,collapse=" "),";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",sp,tmcutname,"_",init.cut,".inp",sep=""))
+    regionn <- "_noreg"
+    if(regions==T)
+        regionn <- "_withreg"
+    cat(paste(c(info,paste(bands,history,paste(grpt,";\r\n",sep=""))),collapse=""),file=paste(resulfold,"/",sp,tmcutname,"_",init.cut,regionn,".inp",sep=""))
 }
